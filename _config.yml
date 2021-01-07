@@ -1,8 +1,8 @@
-title: Stack Problems
+title: YEJUN BLOG
 description: My Personal Stack Problems
-author: Agus Makmun
+author: YEJUN
 github: https://github.com/agusmakmun
-about: I'm Programmer for Python & Django. I've made quite a few web apps, especially on Django.
+about: I'm Programmer.
 disqus_shortname: stackproblems
 google_analytics: UA-XXXXXXXX-Y
 
@@ -19,12 +19,12 @@ social:
       link: "#"
     - icon: fa-twitter
       link: "#"
-    - icon: fa-linkedin
-      link: "#"
-    - icon: fa-stack-exchange
-      link: "#"
+    ##- icon: fa-linkedin
+    ##  link: "#"
+    ##- icon: fa-stack-exchange
+    ##   link: "#"
     - icon: fa-github
-      link: "https://github.com/agusmakmun"
+      link: "https://github.com/yejun4911"
 
 share:
   twitter_username: github.io
@@ -33,10 +33,10 @@ share:
 urls:
     - text: About Me
       url: /about/
-    - text: My Projects
-      url: /projects/
-    - text: XML Feed
-      url: /feed.xml
+    ##- text: My Projects
+    ##  url: /projects/
+    ## - text: XML Feed
+    ##  url: /feed.xml
 
 url: "https://Yejun4911.github.io"
 baseurl: ""

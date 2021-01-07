@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="/static/img/favicon.ico" />
+    <title>Django Amazon S3 Uploader - Stack Problems</title>
+    <meta name="author" content="Agus Makmun" />
+    <meta name="description" content="Django Amazon S3 Uploader" />
+    <meta name="keywords" content="Django Amazon S3 Uploader, Stack Problems, python, django" />
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+    <meta content="1749788565247320" property="fb:app_id">
+    <meta content="Stack Problems" property="og:site_name">
+
+    
+
+    
+      <meta content="Django Amazon S3 Uploader" property="og:title">
+      <meta content="article" property="og:type">
+    
+
+    
+      <meta content="My Personal Stack Problems" property="og:description">
+    
+
+    
+      <meta content="http://localhost:4000/python/django/2020/07/28/django-amazon-s3-uploader.html" property="og:url">
+    
+
+    
+      <meta content="2020-07-28T13:06:00+09:00" property="article:published_time">
+      <meta content="http://localhost:4000/about/" property="article:author">
+    
+
+    
+
+    
+      
+        <meta content="python" property="article:section">
+      
+    
+
+    
+      
+    
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="@github.io">
+    <meta name="twitter:creator" content="@github.io">
+
+    
+      <meta name="twitter:title" content="Django Amazon S3 Uploader">
+    
+
+    
+      <meta name="twitter:url" content="http://localhost:4000/python/django/2020/07/28/django-amazon-s3-uploader.html">
+    
+
+    
+      <meta name="twitter:description" content="My Personal Stack Problems">
+    
+
+    
+
+    <!-- Font awesome icons -->
+    <link href="/static/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/static/css/syntax.css">
+    <!-- Bootstrap core CSS -->
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed:400,300italic,300,400italic,700&amp;subset=latin,latin-ext" rel="stylesheet" type="text/css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/static/css/super-search.css">
+    <link rel="stylesheet" href="/static/css/thickbox.css">
+    <link rel="stylesheet" href="/static/css/projects.css">
+    <link rel="stylesheet" href="/static/css/main.css">
+
+    
+  </head>
+  <body>
+    <div class="container">
+      <div class="col-sm-3">
+        <div class="fixed-condition">
+          <h1 class="author-name"><a href="/">Agus Makmun</a></h1>
+          
+            <div class="profile-about">
+              I'm Programmer for Python & Django. I've made quite a few web apps, especially on Django.
+            </div>
+          
+          <div class="social">
+            <ul>
+              
+                <li><a href="#" target="_blank"><i class="fa fa-facebook"></i></a></li>
+              
+                <li><a href="#" target="_blank"><i class="fa fa-twitter"></i></a></li>
+              
+                <li><a href="#" target="_blank"><i class="fa fa-linkedin"></i></a></li>
+              
+                <li><a href="#" target="_blank"><i class="fa fa-stack-exchange"></i></a></li>
+              
+                <li><a href="https://github.com/agusmakmun" target="_blank"><i class="fa fa-github"></i></a></li>
+              
+            </ul>
+          </div>
+          <div class="search" id="js-search">
+            <input type="text" placeholder="(sitemap)~$ type to search" class="search__input form-control" id="js-search__input">
+            <ul class="search__results" id="js-search__results"></ul>
+          </div>
+          <hr />
+          <ul class="sidebar-nav">
+            <strong>Navigation</strong>
+            <li><a href="/">Home</a></li>
+            
+              <li><a class="about" href="/about/">About Me</a></li>
+            
+              <li><a class="about" href="/projects/">My Projects</a></li>
+            
+              <li><a class="about" href="/feed.xml">XML Feed</a></li>
+            
+          </ul>
+        </div>
+        <!-- end /.fixed-condition -->
+      </div>
+      <div class="col-sm-8 col-offset-1 main-layout">
+        <header class="post-header">
+  <h1 class="post-title">Django Amazon S3 Uploader</h1>
+</header>
+
+<span class="time">28 Jul 2020</span>
+
+  <span class="categories">
+    &raquo; <a href="/category/python">python</a>, <a href="/category/django">django</a>
+  </span>
+
+
+<div class="content">
+  <div class="post"><p>Amazon S3 or Amazon Simple Storage Service is a service offered by Amazon Web Services that provides object storage through a web service interface. Amazon S3 uses the same scalable storage infrastructure that Amazon.com uses to run its global e-commerce network.</p>
+
+<h4 id="aws-s3-configuration">AWS S3 Configuration</h4>
+
+<blockquote>
+  <p>Before you can begin using Boto 3 (for AWS S3), you should set up authentication credentials.
+in this case, AWS S3 Only for upload files or images purpose.</p>
+</blockquote>
+
+<p><strong>a. Using awscli <em>(recommended)</em></strong></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ sudo apt-get install -y awscli
+$ aws configure set aws_access_key_id 
+$ aws configure set aws_secret_access_key 
+$ aws configure set region   # e.g: ap-southeast-1
+</code></pre></div></div>
+
+<p><strong>b. Manual Configuration</strong></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ mkdir ~/.aws &amp;&amp; nano ~/.aws/credentials
+</code></pre></div></div>
+
+<p>and then fill:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[default]
+aws_access_key_id = xxxx
+aws_secret_access_key = xxxx
+</code></pre></div></div>
+
+<p>You may also want to set a default region of your server. The <code class="language-plaintext highlighter-rouge">ap-southeast-1</code> depend with your server region.
+This can be done in the configuration file. By default, its location is at <code class="language-plaintext highlighter-rouge">~/.aws/config</code>:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[default]
+region=ap-southeast-1
+</code></pre></div></div>
+
+<hr />
+
+<p>This example below is one of way “how to integrate” the AmazonS3 with Django <em>(with django-rest-framework)</em>.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ pip install requests boto3
+</code></pre></div></div>
+
+<p>in your <code class="language-plaintext highlighter-rouge">settings.py</code></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">AWS_S3_BUCKET_NAME</span> <span class="o">=</span> <span class="s">'xxx-xxx-xxx'</span>
+<span class="n">MAX_IMAGE_UPLOAD_SIZE</span> <span class="o">=</span> <span class="mi">5242880</span>
+</code></pre></div></div>
+
+<p>then, in your <code class="language-plaintext highlighter-rouge">utils/uploader.py</code></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">boto3</span>
+<span class="kn">import</span> <span class="nn">urllib3</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">import</span> <span class="nn">mimetypes</span>
+
+<span class="kn">from</span> <span class="nn">django.conf</span> <span class="kn">import</span> <span class="n">settings</span>
+<span class="kn">from</span> <span class="nn">django.core.files.base</span> <span class="kn">import</span> <span class="n">ContentFile</span>
+<span class="kn">from</span> <span class="nn">botocore.exceptions</span> <span class="kn">import</span> <span class="n">ClientError</span>
+
+
+<span class="k">class</span> <span class="nc">AmazonS3</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="n">path_format</span> <span class="o">=</span> <span class="n">datetime</span><span class="p">.</span><span class="n">datetime</span><span class="p">.</span><span class="n">now</span><span class="p">().</span><span class="n">strftime</span><span class="p">(</span><span class="s">'%Y/%m/%d'</span><span class="p">)</span>
+    <span class="n">bucket_name</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s">'AWS_S3_BUCKET_NAME'</span><span class="p">)</span>
+    <span class="n">client</span> <span class="o">=</span> <span class="n">boto3</span><span class="p">.</span><span class="n">client</span><span class="p">(</span><span class="s">'s3'</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">get_object_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_url</span><span class="p">):</span>
+        <span class="s">"""
+        function to get the file object name
+        or file path url by `file_url`.
+
+        :param `file_url` is string uploaded url.
+                eg: 'https://s3.ap-southeast-1.amazonaws.com/assets.dev.doain/files/2019/08/13/no-image.svg'
+
+        :return string object_name.
+                eg: 'files/2019/07/22/logo.png'
+        """</span>
+        <span class="k">return</span> <span class="n">urllib3</span><span class="p">.</span><span class="n">util</span><span class="p">.</span><span class="n">parse_url</span><span class="p">(</span><span class="n">file_url</span><span class="p">).</span><span class="n">path</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+
+    <span class="k">def</span> <span class="nf">get_uploaded_url</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">object_name</span><span class="p">):</span>
+        <span class="s">"""
+        function to get the uploaded url.
+
+        :param `object_name` is string object name.
+                eg: 'files/2019/07/22/logo.png'
+
+        :return string of uploaded file/images url.
+                eg: 'https://s3.ap-southeast-1.amazonaws.com/assets.dev.doain/files/2019/08/13/no-image.svg'
+        """</span>
+        <span class="n">location</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">client</span><span class="p">.</span><span class="n">get_bucket_location</span><span class="p">(</span><span class="n">Bucket</span><span class="o">=</span><span class="bp">self</span><span class="p">.</span><span class="n">bucket_name</span><span class="p">)[</span><span class="s">'LocationConstraint'</span><span class="p">]</span>
+        <span class="k">return</span> <span class="s">'https://s3.%s.amazonaws.com/%s/%s'</span> <span class="o">%</span> <span class="p">(</span><span class="n">location</span><span class="p">,</span> <span class="bp">self</span><span class="p">.</span><span class="n">bucket_name</span><span class="p">,</span> <span class="n">object_name</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">upload_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_name</span><span class="p">,</span> <span class="n">folder</span><span class="o">=</span><span class="s">'files'</span><span class="p">):</span>
+        <span class="s">"""
+        function to upload the file or image into aws s3.
+
+        :param `file_name` is file name original path source.
+        :param `folder` is target folder in aws s3.
+
+        :return `url` eg: 'https://s3.ap-southeast-1.amazonaws.com/assets.dev.doain/files/2019/08/13/no-image.svg'
+        """</span>
+        <span class="n">content_type</span> <span class="o">=</span> <span class="n">mimetypes</span><span class="p">.</span><span class="n">guess_type</span><span class="p">(</span><span class="n">file_name</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">object_name</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="n">join</span><span class="p">(</span><span class="n">folder</span><span class="p">,</span> <span class="bp">self</span><span class="p">.</span><span class="n">path_format</span><span class="p">,</span> <span class="n">file_name</span><span class="p">.</span><span class="n">split</span><span class="p">(</span><span class="s">'/'</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">client</span><span class="p">.</span><span class="n">upload_file</span><span class="p">(</span><span class="n">file_name</span><span class="p">,</span> <span class="bp">self</span><span class="p">.</span><span class="n">bucket_name</span><span class="p">,</span> <span class="n">object_name</span><span class="p">,</span>
+                                      <span class="n">ExtraArgs</span><span class="o">=</span><span class="p">{</span><span class="s">'ACL'</span><span class="p">:</span> <span class="s">'public-read'</span><span class="p">,</span>
+                                                 <span class="s">'ContentDisposition'</span><span class="p">:</span> <span class="s">'inline'</span><span class="p">,</span>
+                                                 <span class="s">'ContentType'</span><span class="p">:</span> <span class="n">content_type</span><span class="p">})</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="p">.</span><span class="n">get_uploaded_url</span><span class="p">(</span><span class="n">object_name</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">upload_fileobj</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_obj</span><span class="p">,</span> <span class="n">folder</span><span class="o">=</span><span class="s">'files'</span><span class="p">):</span>
+        <span class="s">"""
+        function to upload the file object or images into aws s3.
+
+        :param `field_obj` is file object, eg: request.FILES['image']
+        :param `folder` is target folder in aws s3.
+
+        :return `url` eg: 'https://s3.ap-southeast-1.amazonaws.com/assets.dev.doain/files/2019/08/13/no-image.svg'
+        """</span>
+        <span class="n">object_name</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="n">join</span><span class="p">(</span><span class="n">folder</span><span class="p">,</span> <span class="bp">self</span><span class="p">.</span><span class="n">path_format</span><span class="p">,</span> <span class="n">file_obj</span><span class="p">.</span><span class="n">name</span><span class="p">.</span><span class="n">split</span><span class="p">(</span><span class="s">'/'</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">file_data</span> <span class="o">=</span> <span class="n">ContentFile</span><span class="p">(</span><span class="n">file_obj</span><span class="p">.</span><span class="n">read</span><span class="p">())</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">client</span><span class="p">.</span><span class="n">upload_fileobj</span><span class="p">(</span><span class="n">file_data</span><span class="p">,</span> <span class="bp">self</span><span class="p">.</span><span class="n">bucket_name</span><span class="p">,</span> <span class="n">object_name</span><span class="p">,</span>
+                                   <span class="n">ExtraArgs</span><span class="o">=</span><span class="p">{</span><span class="s">'ACL'</span><span class="p">:</span> <span class="s">'public-read'</span><span class="p">,</span>
+                                              <span class="s">'ContentDisposition'</span><span class="p">:</span> <span class="s">'inline'</span><span class="p">,</span>
+                                              <span class="s">'ContentType'</span><span class="p">:</span> <span class="n">file_obj</span><span class="p">.</span><span class="n">content_type</span><span class="p">})</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="p">.</span><span class="n">get_uploaded_url</span><span class="p">(</span><span class="n">object_name</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>and then in your <code class="language-plaintext highlighter-rouge">views.py</code></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.conf</span> <span class="kn">import</span> <span class="n">settings</span>
+<span class="kn">from</span> <span class="nn">django.utils.translation</span> <span class="kn">import</span> <span class="n">ugettext_lazy</span> <span class="k">as</span> <span class="n">_</span>
+
+<span class="kn">from</span> <span class="nn">rest_framework</span> <span class="kn">import</span> <span class="n">status</span>
+<span class="kn">from</span> <span class="nn">rest_framework.views</span> <span class="kn">import</span> <span class="n">APIView</span>
+<span class="kn">from</span> <span class="nn">rest_framework.response</span> <span class="kn">import</span> <span class="n">Response</span>
+<span class="kn">from</span> <span class="nn">rest_framework.permissions</span> <span class="kn">import</span> <span class="n">AllowAny</span>
+
+<span class="kn">from</span> <span class="nn">yourapp.utils.uploader</span> <span class="kn">import</span> <span class="n">AmazonS3</span>
+
+
+<span class="k">class</span> <span class="nc">UploadImageView</span><span class="p">(</span><span class="n">APIView</span><span class="p">):</span>
+    <span class="s">"""
+    this "Upload Image" view used to handle image uploader,
+    and save into AmazonS3 storage.
+    """</span>
+    <span class="n">permission_classes</span> <span class="o">=</span> <span class="p">[</span><span class="n">AllowAny</span><span class="p">,]</span>
+    <span class="n">image_types</span> <span class="o">=</span> <span class="p">[</span><span class="s">'image/png'</span><span class="p">,</span> <span class="s">'image/jpg'</span><span class="p">,</span> <span class="s">'image/jpeg'</span><span class="p">,</span> <span class="s">'image/pjpeg'</span><span class="p">,</span>
+                   <span class="s">'image/gif'</span><span class="p">,</span> <span class="s">'image/vnd.microsoft.icon'</span><span class="p">,</span> <span class="s">'image/x-icon'</span><span class="p">]</span>
+    <span class="n">max_size</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s">'MAX_IMAGE_UPLOAD_SIZE'</span><span class="p">,</span> <span class="mi">5242880</span><span class="p">)</span>
+    <span class="n">s3</span> <span class="o">=</span> <span class="n">AmazonS3</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">post</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">folder</span> <span class="o">=</span> <span class="n">request</span><span class="p">.</span><span class="n">POST</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="s">'folder'</span><span class="p">,</span> <span class="s">'images'</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="s">'image'</span> <span class="ow">in</span> <span class="n">request</span><span class="p">.</span><span class="n">FILES</span><span class="p">:</span>
+            <span class="n">image</span> <span class="o">=</span> <span class="n">request</span><span class="p">.</span><span class="n">FILES</span><span class="p">[</span><span class="s">'image'</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">image</span><span class="p">.</span><span class="n">content_type</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">.</span><span class="n">image_types</span><span class="p">:</span>
+                <span class="n">response</span> <span class="o">=</span> <span class="p">{</span><span class="s">'status'</span><span class="p">:</span> <span class="n">status</span><span class="p">.</span><span class="n">HTTP_400_BAD_REQUEST</span><span class="p">,</span>
+                            <span class="s">'message'</span><span class="p">:</span> <span class="n">_</span><span class="p">(</span><span class="s">'Bad image format!'</span><span class="p">)}</span>
+                <span class="k">return</span> <span class="n">Response</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="n">response</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="s">'status'</span><span class="p">))</span>
+
+            <span class="k">if</span> <span class="n">image</span><span class="p">.</span><span class="n">size</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="p">.</span><span class="n">max_size</span><span class="p">:</span>
+                <span class="n">max_size</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">max_size</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1024</span> <span class="o">*</span> <span class="mi">1024</span><span class="p">)</span>
+                <span class="n">response</span> <span class="o">=</span> <span class="p">{</span><span class="s">'status'</span><span class="p">:</span> <span class="n">status</span><span class="p">.</span><span class="n">HTTP_400_BAD_REQUEST</span><span class="p">,</span>
+                            <span class="s">'message'</span><span class="p">:</span> <span class="n">_</span><span class="p">(</span><span class="s">'Maximum image size %(max_size)s MB.'</span><span class="p">)</span> <span class="o">%</span> <span class="p">{</span><span class="s">'max_size'</span><span class="p">:</span> <span class="n">max_size</span><span class="p">}}</span>
+                <span class="k">return</span> <span class="n">Response</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="n">response</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="s">'status'</span><span class="p">))</span>
+
+            <span class="n">image_url</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">s3</span><span class="p">.</span><span class="n">upload_fileobj</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">folder</span><span class="o">=</span><span class="n">folder</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">image_url</span><span class="p">:</span>
+                <span class="n">response</span> <span class="o">=</span> <span class="p">{</span><span class="s">'status'</span><span class="p">:</span> <span class="n">status</span><span class="p">.</span><span class="n">HTTP_400_BAD_REQUEST</span><span class="p">,</span>
+                            <span class="s">'message'</span><span class="p">:</span> <span class="n">_</span><span class="p">(</span><span class="s">'Failed to upload the image.'</span><span class="p">)}</span>
+                <span class="k">return</span> <span class="n">Response</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="n">response</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="s">'status'</span><span class="p">))</span>
+
+            <span class="n">response</span> <span class="o">=</span> <span class="p">{</span><span class="s">'status'</span><span class="p">:</span> <span class="n">status</span><span class="p">.</span><span class="n">HTTP_200_OK</span><span class="p">,</span>
+                        <span class="s">'message'</span><span class="p">:</span> <span class="n">_</span><span class="p">(</span><span class="s">'Image successfully uploaded.'</span><span class="p">),</span>
+                        <span class="s">'result'</span><span class="p">:</span> <span class="p">{</span>
+                            <span class="s">'image_url'</span><span class="p">:</span> <span class="n">image_url</span><span class="p">,</span>
+                            <span class="s">'image_name'</span><span class="p">:</span> <span class="n">image</span><span class="p">.</span><span class="n">name</span>
+                        <span class="p">}}</span>
+            <span class="k">return</span> <span class="n">Response</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="n">response</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="s">'status'</span><span class="p">))</span>
+
+        <span class="n">response</span> <span class="o">=</span> <span class="p">{</span><span class="s">'status'</span><span class="p">:</span> <span class="n">status</span><span class="p">.</span><span class="n">HTTP_400_BAD_REQUEST</span><span class="p">,</span>
+                    <span class="s">'message'</span><span class="p">:</span> <span class="n">_</span><span class="p">(</span><span class="s">'Invalid "image" field.'</span><span class="p">)}</span>
+        <span class="k">return</span> <span class="n">Response</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="n">response</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="s">'status'</span><span class="p">))</span>
+</code></pre></div></div>
+</div>
+  <div class="share-page">
+  <span style="float: left;">Share this on &rarr;&nbsp;&nbsp;</span>
+
+  <!-- Twitter -->
+  <a href="https://twitter.com/share" class="twitter-share-button" data-via="github.io">Tweet</a>
+  <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+  <!-- Facebook -->
+  <div class="fb-share-button" data-href="http://localhost:4000/python/django/2020/07/28/django-amazon-s3-uploader.html" data-layout="button_count" style="position: relative; top: -8px; left: 3px;"></div>
+</div>
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.6&appId=1749788565247320";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+</div>
+
+
+  
+    
+      
+        
+          
+            
+            <div class="panel-body">
+              <h4>Related Posts</h4>
+              <ul>
+            
+                <li class="relatedPost">
+                  <a href="http://localhost:4000/python/django/security/2020/08/19/how-to-handle-xss-injection-in-django.html">How to handle XSS Injection in Django?</a>
+                  
+                    (Categories: <a href="/category/python">python</a>, <a href="/category/django">django</a>, <a href="/category/security">security</a>)
+                  
+                </li>
+          
+          
+        
+      
+          
+      
+    
+        
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+    
+  
+    
+      
+        
+          
+            
+                <li class="relatedPost">
+                  <a href="http://localhost:4000/python/django/security/2020/08/01/how-can-i-accept-and-run-users-code-securely.html">How can i accept and run user's code securely on my web app?</a>
+                  
+                    (Categories: <a href="/category/python">python</a>, <a href="/category/django">django</a>, <a href="/category/security">security</a>)
+                  
+                </li>
+          
+          
+        
+      
+          
+      
+    
+        
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+    
+  
+    
+      
+        
+          
+            
+                <li class="relatedPost">
+                  <a href="http://localhost:4000/python/django/2020/07/28/how-to-custom-select-language-icon-in-django-administration.html">How to custom select language icon in django administration</a>
+                  
+                    (Categories: <a href="/category/python">python</a>, <a href="/category/django">django</a>)
+                  
+                </li>
+          
+          
+        
+      
+          
+      
+    
+        
+          
+      
+          
+      
+    
+  
+    
+      
+        
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+    
+  
+    
+      
+        
+          
+            
+                <li class="relatedPost">
+                  <a href="http://localhost:4000/python/django/2020/07/07/solve-django-migration-problem.html">Solve Django migration problem</a>
+                  
+                    (Categories: <a href="/category/python">python</a>, <a href="/category/django">django</a>)
+                  
+                </li>
+          
+          
+        
+      
+          
+      
+    
+        
+          
+      
+          
+      
+    
+  
+    
+      
+        
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+    
+  
+    
+      
+        
+          
+            
+                <li class="relatedPost">
+                  <a href="http://localhost:4000/python/django/2020/05/12/how-setup-all-raw-id-fields-and-search-fields-for-django.html">How to setup all raw_id_fields and search_fields for django</a>
+                  
+                    (Categories: <a href="/category/python">python</a>, <a href="/category/django">django</a>)
+                  
+                </li>
+          
+          
+        
+      
+          
+      
+    
+        
+          
+      
+          
+      
+    
+  
+    
+      
+        
+          
+            
+                <li class="relatedPost">
+                  <a href="http://localhost:4000/python/2020/05/02/python-numberize-until-undefined-or-infinity-numbers.html">Python numberize until undefined or infinity numbers</a>
+                  
+                    (Categories: <a href="/category/python">python</a>)
+                  
+                </li>
+          
+          
+        
+      
+          
+      
+    
+  
+    
+      
+        
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+    
+  
+    
+      
+        
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+    
+  
+    
+      
+        
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+    
+  
+    
+      
+        
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+    
+  
+    
+      
+        
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+    
+  
+    
+      
+        
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+    
+  
+    
+      
+        
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+    
+  
+    
+      
+        
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+    
+  
+    
+      
+        
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+    
+  
+    
+      
+        
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+    
+  
+    
+      
+        
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+    
+  
+    
+      
+        
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+    
+  
+    
+      
+        
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+    
+  
+    
+      
+        
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+    
+  
+    
+      
+        
+          
+      
+          
+      
+    
+  
+    
+      
+        
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+    
+  
+    
+      
+        
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+    
+  
+    
+      
+        
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+    
+  
+    
+      
+        
+          
+      
+          
+      
+    
+  
+    
+      
+        
+          
+      
+          
+      
+    
+  
+    
+      
+        
+          
+      
+          
+      
+    
+  
+    
+      
+        
+          
+      
+          
+      
+    
+  
+    
+      
+        
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+    
+  
+    
+      
+        
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+    
+  
+    
+      
+        
+          
+      
+          
+      
+    
+  
+    
+      
+        
+          
+      
+          
+      
+    
+  
+    
+      
+        
+          
+      
+          
+      
+    
+  
+  
+  </ul>
+</div>
+
+
+<div class="PageNavigation">
+  
+    <a class="prev" href="/python/django/2020/07/07/solve-django-migration-problem.html">&laquo; Solve Django migration problem</a>
+  
+  
+    <a class="next" href="/python/django/2020/07/28/how-to-custom-select-language-icon-in-django-administration.html">How to custom select language icon in django administration &raquo;</a>
+  
+</div>
+
+<div class="disqus-comments">
+  <div id="disqus_thread"></div>
+  <script type="text/javascript">
+    /* <![CDATA[ */
+    var disqus_shortname = "stackproblems";
+    var disqus_identifier = "http://localhost:4000_Django Amazon S3 Uploader";
+    var disqus_title = "Django Amazon S3 Uploader";
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    /* ]]> */
+  </script>
+</div>
+
+        <footer>
+          &copy; Agus Makmun
+          
+            - <a href="https://github.com/agusmakmun">https://github.com/agusmakmun</a> - Powered by Jekyll.
+          
+          <div class="btn-github" style="float:right;">
+            <iframe src="https://ghbtns.com/github-btn.html?user=agusmakmun&repo=agusmakmun.github.io&type=star&count=true" frameborder="0" scrolling="0" width="100" height="20px"></iframe>
+            <iframe src="https://ghbtns.com/github-btn.html?user=agusmakmun&repo=agusmakmun.github.io&type=fork&count=true" frameborder="0" scrolling="0" width="100" height="20px"></iframe>
+          </div>
+        </footer>
+      </div>
+      <!-- end /.col-sm-8 -->
+    </div>
+    <!-- end /.container -->
+
+    <!-- Bootstrap core JavaScript -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/super-search.js"></script>
+    <script src="/static/js/thickbox-compressed.js"></script>
+    <script src="/static/js/projects.js"></script>
+  </body>
+</html>
+
